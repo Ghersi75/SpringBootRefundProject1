@@ -13,11 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
   UserService userService;
 
@@ -26,13 +28,13 @@ public class UserController {
   }
 
   @GetMapping("/login")
-  public String LoginHandler(@CookieValue(value = "token", defaultValue = "nothing") String token, HttpServletResponse res) {
+  public Map<String, Boolean> LoginHandler(@CookieValue(value = "token", defaultValue = "nothing") String token, HttpServletResponse res) {
     System.out.println(token);
     Cookie cookie = new Cookie("token", "test");
 
     res.addCookie(cookie);
 
-    return "Logged in";
+    return Map.of("logged_in", false);
   }
 
   @GetMapping("test")
