@@ -18,5 +18,16 @@ public class UserService {
   public List<User> getAllUsers() {
     return this.userRepository.findAll();
   }
-  
+
+  public Boolean isUsernameAvailable(String username) {
+    User user = this.userRepository.findByUsernameIgnoreCase(username);
+
+    // Could also return user == null; but this is more readable
+    if (user == null) {
+      return true;
+    }
+
+    return false;
+
+  }
 }
