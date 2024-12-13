@@ -11,4 +11,4 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - ./backend/main/resources/initdb:/docker-entrypoint-initdb.d
+      - ./backend/src/main/resources/initdb:/docker-entrypoint-initdb.d
