@@ -1,6 +1,7 @@
 package project1.app.Controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.Cookie;
@@ -9,6 +10,7 @@ import project1.app.Models.User;
 import project1.app.Service.UserService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,5 +40,10 @@ public class UserController {
     return this.userService.getAllUsers();
   }
   
-  
+  @GetMapping("/check-username") 
+  public Map<String, Boolean> checkUsername(@RequestParam String username) {
+    System.out.println("Username: " + username);
+
+    return Map.of("isAvailable", this.userService.isUsernameAvailable(username));
+  }
 }
