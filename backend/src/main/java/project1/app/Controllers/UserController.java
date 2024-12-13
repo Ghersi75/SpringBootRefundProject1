@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import project1.app.Models.User;
-import project1.app.Repository.UserRepository;
 import project1.app.Service.UserService;
 
 import java.util.List;
