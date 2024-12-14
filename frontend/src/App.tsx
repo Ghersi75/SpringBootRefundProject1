@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom"
-import Login from "./components/Login"
-import Navbar from "./components/Navbar"
-import Tickets from "./pages/Tickets"
-import SignUp from "./components/SignUp"
+import Login from "./Components/Login"
+import Navbar from "./Components/Navbar"
+import Tickets from "./Pages/Tickets"
+import SignUpManager from "./Components/SignUpManager"
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element= { <Tickets /> } />
         <Route path="/login" element={ <Login /> } />
-        <Route path="/signup" element={ <SignUp /> } />
+        <Route path="/signup" element={ <SignUpManager /> } />
       </Routes>
     </div>
   )
