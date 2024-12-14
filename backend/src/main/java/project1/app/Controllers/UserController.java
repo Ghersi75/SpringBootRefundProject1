@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 // " username" should be treated as "username" for example
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:5173")
+// Allow credentials true necessary for browser cookies to be stored locally
+// Request from frontend also needs credentials = true to work properly
+// Not sure why this causes issues now, but it's fixed this way
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class UserController {
   UserService userService;
 
@@ -43,11 +46,10 @@ public class UserController {
     Cookie cookie = new Cookie("token", "test");
 
     res.addCookie(cookie);
-
     return Map.of("logged_in", false);
   }
-  
-  @GetMapping("/check-username") 
+
+  @GetMapping("/check-username")
   public Map<String, Boolean> checkUsername(@RequestParam String username) {
     System.out.println("Username: " + username);
 
