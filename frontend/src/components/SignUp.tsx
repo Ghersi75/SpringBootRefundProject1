@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { SignInFormPropsType } from "../Types/UserFormTypes";
+import { SignUpFormPropsType } from "../Types/UserFormTypes";
 
-export default function SignUp({ email, setEmail, username, setUsername, password, setPassword }: SignInFormPropsType) {
+export default function SignUp({ email, setEmail, username, setUsername, password, setPassword }: SignUpFormPropsType) {
   const [showPass, setShowPass] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
