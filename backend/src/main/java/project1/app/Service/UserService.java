@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import project1.app.DTO.UserSignUpDTO;
 import project1.app.Models.User;
 import project1.app.Repository.UserRepository;
 
@@ -28,6 +29,11 @@ public class UserService {
     }
 
     return false;
+  }
 
+  public String SignUpUser(UserSignUpDTO userInfo) {
+    this.userRepository.save(new User(userInfo));
+
+    return "Done?";
   }
 }
