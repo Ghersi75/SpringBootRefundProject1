@@ -1,10 +1,12 @@
 import { createContext, useState } from "react";
 import { ChildrenPropType, UserContextType, UserInfoType } from "../Types/ContextTypes";
+import { useCookies } from "react-cookie";
 
 export const UserContext = createContext<UserContextType | null>(null);
 
 export const UserProvider = ({ children }: ChildrenPropType) => {
-  const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
+  const [userCookie, _] = useCookies(["user"]);
+  const [userInfo, setUserInfo] = useState<UserInfoType | null>(userCookie.user);
   return (
     <UserContext.Provider value={{ userInfo, setUserInfo }}>
       { children }
