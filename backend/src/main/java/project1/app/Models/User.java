@@ -1,7 +1,5 @@
 package project1.app.Models;
 
-import org.hibernate.annotations.ColumnTransformer;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,7 +18,6 @@ enum Role {
   MANAGER
 }
 
-// TODO: Add email
 @Entity
 @Table(name = "users")
 @Data
