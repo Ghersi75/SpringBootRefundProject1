@@ -56,7 +56,6 @@ public class UserController {
 
   @PostMapping("/signup")
   public String SingUpHandler(@Valid @RequestBody() UserSignUpDTO userInfo) {
-    
-    return "Success";
+    return this.userService.SignUpUser(userInfo);
   }
 }
