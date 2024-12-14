@@ -1,11 +1,23 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react"
+// import { useNavigate } from "react-router-dom";
+import { UserContext } from "../Context/UserContext";
+import { useCookies } from "react-cookie";
+
 
 export default function Login() {
   const [showPass, setShowPass] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [cookies, setCookies] = useCookies(["user"]);
+  // const navigate = useNavigate();
+  console.log(cookies);
+  const content = useContext(UserContext);
+  
+  if (!content) {
+    throw new Error("Error");
+  }
+
+  const { setUserInfo } = content;
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -20,9 +32,17 @@ export default function Login() {
   }
 
   const handleLogin = async () => {
-    await fetch("http://localhost:8080/user/login")
+    // setCookies("user", {
+    //   username: username,
+    //   email: "test@test.com"
+    // })
+
+    await fetch("http://localhost:8080/user/login", {
+      method: "GET",
+      credentials: "include"
+    })
       .then(res => res.json())
-      .then(data => { console.log(data); navigate("/"); })
+      .then(data => { console.log(data); })
   }
 
   return (
