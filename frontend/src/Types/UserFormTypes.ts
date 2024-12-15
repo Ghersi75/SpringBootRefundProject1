@@ -8,3 +8,11 @@ export interface SignUpFormPropsType {
   isUsernameAvailable: boolean | null,
   handleSignUp: () => void
 }
+
+export interface LoginFormPropsType {
+  email: string,
+  setEmail: React.Dispatch<React.SetStateAction<string>>,
+  password: string,
+  setPassword: React.Dispatch<React.SetStateAction<string>>,
+  handleLogin: () => void
+}
