@@ -86,9 +86,9 @@ public class UserController {
       userInfoCookie.setHttpOnly(false);
       // Only send the cookie through HTTPS
       userInfoCookie.setSecure(true);
-      // Setting the cookie age to 0 defaults to deleting once the session is over (close browser)
-      // Could set this to any number and the cookie will be deleted by the browser once it expires
-      userInfoCookie.setMaxAge(0);
+      // Setting the cookie age to -1 defaults to deleting once the session is over (close browser)
+      // Could set this to any number (of seconds) and the cookie will be deleted by the browser once it expires
+      userInfoCookie.setMaxAge(-1);
 
       res.addCookie(userInfoCookie);
     } catch (Exception e) {
