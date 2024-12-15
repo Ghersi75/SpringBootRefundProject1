@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import project1.app.DTO.UserInfoDTO;
 import project1.app.DTO.UserSignUpDTO;
 import project1.app.Models.User;
 import project1.app.Repository.UserRepository;
+import project1.app.Utils.PasswordUtil;
 
 @Service
 public class UserService {
@@ -31,9 +33,39 @@ public class UserService {
     return false;
   }
 
-  public String SignUpUser(UserSignUpDTO userInfo) {
+  // TODO: Make custom exceptions for each one and use appropriate status codes
+  public UserInfoDTO SignUpUser(UserSignUpDTO userInfo) {
+    User userWithUsername = this.userRepository.findByUsernameIgnoreCase(userInfo.getUsername());
+    
+    if (userWithUsername != null) {
+      // 409 Conflict - Username already taken
+      throw new RuntimeException("Username already taken");
+    }
+
+    User userWithEmail = this.userRepository.findByEmailIgnoreCase(userInfo.getEmail());
+
+    if (userWithEmail != null) {
+      // 409 Conflict - Email already taken
+      throw new RuntimeException("Email already taken");
+    }
+
+    // Since password is validated by jakarta there's no additional check needed here
+    String hashedPassword = PasswordUtil.hashPassword(userInfo.getPassword());
+    // TODO: figure out
+    // Not sure if this is fine or if a new object should be created
+    userInfo.setPassword(hashedPassword);
+    
     this.userRepository.save(new User(userInfo));
 
-    return "Done?";
+    User newUser = this.userRepository.findByUsernameIgnoreCase(userInfo.getUsername());
+
+    if (newUser == null) {
+      // 500 Internal Server Error - Something went wrong with sql
+      throw new RuntimeException("Internal Server Error. Please try again");
+    }
+
+    UserInfoDTO newUserInfo = new UserInfoDTO(userInfo.getUsername(), userInfo.getEmail());
+
+    return newUserInfo;
   }
 }
