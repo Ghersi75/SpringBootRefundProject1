@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom"
-import Login from "./Components/Login/Login"
 import Navbar from "./Components/Navbar/Navbar"
 import Tickets from "./Pages/Tickets"
 import SignUpManager from "./Components/SignUp/SignUpManager"
 import { Toaster } from "react-hot-toast"
+import LoginManager from "./Components/Login/LoginManager"
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element= { <Tickets /> } />
-        <Route path="/login" element={ <Login /> } />
+        <Route path="/login" element={ <LoginManager /> } />
         <Route path="/signup" element={ <SignUpManager /> } />
       </Routes>
     </div>
