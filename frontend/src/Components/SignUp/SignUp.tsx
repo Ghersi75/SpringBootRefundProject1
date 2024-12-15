@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { SignUpFormPropsType } from "../Types/UserFormTypes";
+import { SignUpFormPropsType } from "../../Types/UserFormTypes";
 
 export default function SignUp({ email, setEmail, username, setUsername, password, setPassword }: SignUpFormPropsType) {
   const [showPass, setShowPass] = useState(false);
