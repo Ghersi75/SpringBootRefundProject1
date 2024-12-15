@@ -1,16 +1,9 @@
-import { useContext } from "react"
 import { Link } from "react-router-dom"
-import { UserContext } from "../../Context/UserContext";
 import NavbarUserInfo from "./NavbarUserInfo";
+import { useUserInfo } from "../../Hooks/useUserInfo";
 
 export default function Navbar() {
-  const content = useContext(UserContext);
-
-  if (!content) {
-    throw new Error("Error");
-  }
-
-  const { userInfo } = content;
+  const { userInfo } = useUserInfo();
 
   return(
     <nav className="h-[80px] min-w-svw bg-zinc-800 flex gap-4 py-4 px-8 justify-between items-center text-white">
