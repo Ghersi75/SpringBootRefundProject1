@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SignUp from "./SignUp";
-import { useDebounce } from "../Hooks/useDebounce";
+import { useDebounce } from "../../Hooks/useDebounce";
 
 export default function SignUpManager() {
   const [email, setEmail] = useState("");

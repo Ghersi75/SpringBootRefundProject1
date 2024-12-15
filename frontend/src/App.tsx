@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom"
-import Login from "./Components/Login"
-import Navbar from "./Components/Navbar"
+import Login from "./Components/Login/Login"
+import Navbar from "./Components/Navbar/Navbar"
 import Tickets from "./Pages/Tickets"
-import SignUpManager from "./Components/SignUpManager"
+import SignUpManager from "./Components/SignUp/SignUpManager"
 
 function App() {
   return (
