@@ -8,4 +8,6 @@ import project1.app.Models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
   User findByUsernameIgnoreCase(String username);
+
+  User findByEmailIgnoreCase(String email);
 }
