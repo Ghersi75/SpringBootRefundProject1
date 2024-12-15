@@ -1,18 +1,13 @@
-import { useContext } from "react";
-import { UserContext } from "../../Context/UserContext";
+import { useUserInfo } from "../../Hooks/useUserInfo";
 
 export default function NavbarUserInfo() {
-  const content = useContext(UserContext);
-  
-    if (!content) {
-      throw new Error("Error");
-    }
-  
-    const { userInfo } = content;
-    if (!userInfo) {
-      return;
-    }
-    const { username, email, profilePicLink } = userInfo;
+  const { userInfo } = useUserInfo();
+
+  if (userInfo == null) {
+    return ;
+  }
+
+  const { username, email, profilePicLink } = userInfo;
   return(
     <div className="flex gap-4">
       <div className="flex flex-col justify-center">
