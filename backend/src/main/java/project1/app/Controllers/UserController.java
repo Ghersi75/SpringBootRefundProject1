@@ -2,18 +2,25 @@ package project1.app.Controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import project1.app.DTO.UserInfoDTO;
 import project1.app.DTO.UserSignUpDTO;
 import project1.app.Models.User;
 import project1.app.Service.UserService;
 
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,7 +64,37 @@ public class UserController {
   }
 
   @PostMapping("/signup")
-  public String SingUpHandler(@Valid @RequestBody() UserSignUpDTO userInfo) {
-    return this.userService.SignUpUser(userInfo);
+  // 201 Created
+  @ResponseStatus(HttpStatus.CREATED)
+  // Rollback for any exception
+  @Transactional(rollbackFor = Exception.class)
+  public Map<String, Boolean> SingUpHandler(@Valid @RequestBody() UserSignUpDTO userInfo, HttpServletResponse res) {
+    // userService.SignUpUser should never return null, so this should be safe
+    UserInfoDTO newUserInfo = this.userService.SignUpUser(userInfo);
+
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+
+      // Throws RuntimeException so Transactional would rollback automatically
+      String userInfoString = objectMapper.writeValueAsString(newUserInfo);
+      // Throws checked Exception so Transaction rollbackFor would kick in and revert the tranasaction
+      userInfoString = URLEncoder.encode(userInfoString, "UTF-8");
+      Cookie userInfoCookie = new Cookie("userInfo", userInfoString);
+      // Make it available on the entire website instaed of the path it makes the api call from
+      userInfoCookie.setPath("/");
+      // Allow the cookie to be accessed through javascript
+      userInfoCookie.setHttpOnly(false);
+      // Only send the cookie through HTTPS
+      userInfoCookie.setSecure(true);
+      // Setting the cookie age to 0 defaults to deleting once the session is over (close browser)
+      // Could set this to any number and the cookie will be deleted by the browser once it expires
+      userInfoCookie.setMaxAge(0);
+
+      res.addCookie(userInfoCookie);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return Map.of("success", true);
   }
 }
