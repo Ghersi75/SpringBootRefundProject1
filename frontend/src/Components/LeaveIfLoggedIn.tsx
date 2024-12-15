@@ -14,12 +14,11 @@ export default function LeaveIfLoggedIn({ children }: ChildrenPropType) {
         navigate("/");
       }
     }, 1000)
+    setIsChecking(false);
     
     return () => {
       clearTimeout(timeout)
     }
-
-    setIsChecking(false);
   }, [userInfo])
 
   if (isChecking) {
