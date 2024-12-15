@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import project1.app.DTO.UserInfoDTO;
+import project1.app.DTO.UserLoginDTO;
 import project1.app.DTO.UserSignUpDTO;
+import project1.app.Exceptions.Status401.InvalidLoginInformationException;
 import project1.app.Exceptions.Status409.EmailAlreadyTakenException;
 import project1.app.Exceptions.Status409.UsernameAlreadyTakenException;
 import project1.app.Exceptions.Status500.UserCreationError;
@@ -70,5 +72,25 @@ public class UserService {
     UserInfoDTO newUserInfo = new UserInfoDTO(userInfo.getUsername(), userInfo.getEmail());
 
     return newUserInfo;
+  }
+
+  public UserInfoDTO LoginUser(UserLoginDTO userInfo) {
+    User userWithEmail = this.userRepository.findByEmailIgnoreCase(userInfo.getEmail());
+
+    // Email invalid
+    if (userWithEmail == null) {
+      throw new InvalidLoginInformationException("Invalid login information");
+    }
+
+    boolean passwordMatch = PasswordUtil.checkPassword(userInfo.getPassword(), userWithEmail.getPasswordHash());
+
+    // Password invalid
+    if (!passwordMatch) {
+      throw new InvalidLoginInformationException("Invalid login information");
+    }
+
+    UserInfoDTO loggedInUserInfo = new UserInfoDTO(userWithEmail.getUsername(), userWithEmail.getEmail());
+
+    return loggedInUserInfo;
   }
 }
