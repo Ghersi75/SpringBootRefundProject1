@@ -42,8 +42,8 @@ public class User {
   private String lastName;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "role", columnDefinition = "Role")
-  private Role role;
+  @Column(name = "user_role")
+  private Role userRole;
 
   public User(UserSignUpDTO userInfo) {
     this.username = userInfo.getUsername();
@@ -52,9 +52,9 @@ public class User {
     this.lastName = userInfo.getLastName();
     this.email = userInfo.getEmail();
     if (userInfo.getRole() == null) {
-      this.role = Role.EMPLOYEE;
+      this.userRole = Role.EMPLOYEE;
     } else {
-      this.role = userInfo.getRole() == "MANAGER" ? Role.MANAGER : Role.EMPLOYEE;
+      this.userRole = userInfo.getRole() == "MANAGER" ? Role.MANAGER : Role.EMPLOYEE;
     }
   }
 }
