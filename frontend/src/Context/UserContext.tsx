@@ -15,12 +15,24 @@ const decodeUsername = (username: string) => {
 
 export const UserProvider = ({ children }: ChildrenPropType) => {
   const [userCookie, _] = useCookies(["userInfo"]);
-  const decodedUsername = decodeUsername(userCookie.userInfo.username);
-  const [userInfo, setUserInfo] = useState<UserInfoType | null>({ ...userCookie.userInfo, username: decodedUsername });
+  const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
+
+  // User logged in, format username, otherwise it default to null ^
+  if ( userCookie.userInfo ) {
+    const decodedUsername = decodeUsername(userCookie.userInfo.username);
+    setUserInfo({ ...userCookie.userInfo, username: decodedUsername });
+  }
 
   // Update if cookie changes or is removed
   useEffect(() => {
-    setUserInfo({ ...userCookie.userInfo, username: decodedUsername });
+    if ( userCookie.userInfo ) {
+      // User logged in, format username
+      const decodedUsername = decodeUsername(userCookie.userInfo.username);
+      setUserInfo({ ...userCookie.userInfo, username: decodedUsername });
+    } else {
+      // User Logged out if userCookie is null
+      setUserInfo(null)
+    }
   }, [userCookie.userInfo])
 
   return (
