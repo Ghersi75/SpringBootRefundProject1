@@ -19,7 +19,7 @@ export default function Login({ email, setEmail, password, setPassword, handleLo
     <LeaveIfLoggedIn>
       <div className="grow flex justify-center items-center">
         <form className="bg-zinc-800 p-8 rounded-l flex flex-col gap-4" onSubmit={(e) => {e.preventDefault()}}>
-          <label className="text-white"> Username: </label>
+          <label className="text-white"> Email: </label>
           <input className="bg-zinc-700 rounded p-2 text-white"  onChange={(e) => { handleChange(e, setEmail) }} value={email} />
           <label className="text-white"> Password: </label>
           <div className="relative">
