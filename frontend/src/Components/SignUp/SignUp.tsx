@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { SignUpFormPropsType } from "../../Types/UserFormTypes";
 
-export default function SignUp({ email, setEmail, username, setUsername, password, setPassword }: SignUpFormPropsType) {
+export default function SignUp({ email, setEmail, username, setUsername, password, setPassword, handleSignUp }: SignUpFormPropsType) {
   const [showPass, setShowPass] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
@@ -10,10 +10,6 @@ export default function SignUp({ email, setEmail, username, setUsername, passwor
 
   const handleShowPassword = () => {
     setShowPass((prev) => !prev)
-  }
-
-  const handleSignUp = () => {
-    return
   }
 
   return (
