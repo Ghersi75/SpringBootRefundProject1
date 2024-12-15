@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import project1.app.DTO.UserInfoDTO;
 import project1.app.DTO.UserSignUpDTO;
+import project1.app.Exceptions.Status409.EmailAlreadyTakenException;
+import project1.app.Exceptions.Status409.UsernameAlreadyTakenException;
+import project1.app.Exceptions.Status500.UserCreationError;
 import project1.app.Models.User;
 import project1.app.Repository.UserRepository;
 import project1.app.Utils.PasswordUtil;
@@ -39,14 +42,14 @@ public class UserService {
     
     if (userWithUsername != null) {
       // 409 Conflict - Username already taken
-      throw new RuntimeException("Username already taken");
+      throw new UsernameAlreadyTakenException("Username already taken");
     }
 
     User userWithEmail = this.userRepository.findByEmailIgnoreCase(userInfo.getEmail());
 
     if (userWithEmail != null) {
       // 409 Conflict - Email already taken
-      throw new RuntimeException("Email already taken");
+      throw new EmailAlreadyTakenException("Email already taken");
     }
 
     // Since password is validated by jakarta there's no additional check needed here
@@ -61,7 +64,7 @@ public class UserService {
 
     if (newUser == null) {
       // 500 Internal Server Error - Something went wrong with sql
-      throw new RuntimeException("Internal Server Error. Please try again");
+      throw new UserCreationError("User Creation Error");
     }
 
     UserInfoDTO newUserInfo = new UserInfoDTO(userInfo.getUsername(), userInfo.getEmail());
