@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import project1.app.DTO.DisplayUserInfoDTO;
+import project1.app.DTO.AuthUserInfoDTO;
+import project1.app.DTO.UserInfoDTO;
 import project1.app.DTO.UserLoginDTO;
 import project1.app.DTO.UserSignUpDTO;
 import project1.app.Enums.UserRole;
@@ -77,9 +78,13 @@ public class UserController {
   @Transactional(rollbackFor = Exception.class)
   public Map<String, Boolean> SingUpHandler(@Valid @RequestBody() UserSignUpDTO userInfo, HttpServletResponse res) {
     // userService.SignUpUser should never return null, so this should be safe
-    DisplayUserInfoDTO newUserInfo = this.userService.SignUpUser(userInfo);
-    Cookie userInfoCookie = CookieUtil.CreateCookie("userInfo", newUserInfo, "/", false, true, -1);
+    UserInfoDTO newUserInfo = this.userService.SignUpUser(userInfo);
+    Cookie userInfoCookie = CookieUtil.CreateCookie("userInfo", newUserInfo.getDisplayUserInfoDTO(), "/", false, true, -1);
     res.addCookie(userInfoCookie);
+    AuthUserInfoDTO authUserInfo = newUserInfo.getAuthUserInfoDTO();
+    String jwt = JWTUtil.generateToken(authUserInfo.getUserId(), authUserInfo.getUserRole());
+    Cookie userAuthCookie = CookieUtil.CreateCookie("jwt", jwt, "/", true, true, -1);
+    res.addCookie(userAuthCookie);
     return Map.of("success", true);
   }
 
@@ -90,9 +95,13 @@ public class UserController {
   // Rollback for any exception
   @Transactional(rollbackFor = Exception.class)
   public Map<String, Boolean> LoginHandler(@Valid @RequestBody() UserLoginDTO userInfo, HttpServletResponse res) {
-    DisplayUserInfoDTO loggedInUserInfo = this.userService.LoginUser(userInfo);
-    Cookie userInfoCookie = CookieUtil.CreateCookie("userInfo", loggedInUserInfo, "/", false, true, -1);
+    UserInfoDTO loggedInUserInfo = this.userService.LoginUser(userInfo);
+    Cookie userInfoCookie = CookieUtil.CreateCookie("userInfo", loggedInUserInfo.getDisplayUserInfoDTO(), "/", false, true, -1);
     res.addCookie(userInfoCookie);
+    AuthUserInfoDTO authUserInfo = loggedInUserInfo.getAuthUserInfoDTO();
+    String jwt = JWTUtil.generateToken(authUserInfo.getUserId(), authUserInfo.getUserRole());
+    Cookie userAuthCookie = CookieUtil.CreateCookie("jwt", jwt, "/", true, true, -1);
+    res.addCookie(userAuthCookie);
     return Map.of("success", true);
   }
 }
