@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import project1.app.Enums.ReimbursementType;
 import project1.app.Enums.TicketStatus;
 
 @Entity
@@ -42,6 +43,8 @@ public class Ticket {
   // Store as int and format on the frontend
   private int amount;
 
+  private String description;
+
   @Enumerated(EnumType.STRING)
   @Column(name = "ticket_status")
   private TicketStatus ticketStatus;
@@ -49,4 +52,8 @@ public class Ticket {
   @JsonFormat(pattern = "hh:mm - dd/MM/yy")
   @Column(name = "time_added")
   private LocalDateTime timeAdded;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "reimbursement_type")
+  private ReimbursementType reimbursementType;
 }
