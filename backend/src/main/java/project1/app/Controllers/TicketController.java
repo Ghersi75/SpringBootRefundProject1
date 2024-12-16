@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import project1.app.Enums.TicketStatus;
 import project1.app.Models.Ticket;
 import project1.app.Service.TicketService;
 
@@ -18,9 +20,9 @@ public class TicketController {
     this.ticketService = ticketService;
   }
   
-  @GetMapping("/all")
-  public List<Ticket> getAllTicketsHandler() {
-    
-    return this.ticketService.getAllTickets();
+  @GetMapping("")
+  public List<Ticket> getAllTicketsHandler(@RequestParam(required = false) Long userId, @RequestParam(required = false) String ticketStatus ) {
+    // TicketStatus ticketStatusEnum;
+    return this.ticketService.getAllTicketsFiltered(userId, TicketStatus.fromString(ticketStatus));
   }
 }

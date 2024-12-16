@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.Nullable;
+import project1.app.Enums.TicketStatus;
 import project1.app.Models.Ticket;
 import project1.app.Repository.TicketRepository;
 
@@ -17,5 +19,9 @@ public class TicketService {
 
   public List<Ticket> getAllTickets() {
     return this.ticketRepository.findAll();
+  }
+  
+  public List<Ticket> getAllTicketsFiltered(@Nullable Long userId, @Nullable TicketStatus ticketStatus) {
+    return this.ticketRepository.findByUserIdAndTicketStatus(userId, ticketStatus);
   }
 }
