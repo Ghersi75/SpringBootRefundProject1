@@ -47,13 +47,22 @@ public class Ticket {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "ticket_status")
-  private TicketStatus ticketStatus;
+  // Set default value directly, otherwise it tries to input as null if custom constructor is called
+  private TicketStatus ticketStatus = TicketStatus.PENDING;
 
-  @JsonFormat(pattern = "hh:mm - dd/MM/yy")
+  @JsonFormat(pattern = "hh:mma - MMM dd yyyy")
   @Column(name = "time_added")
-  private LocalDateTime timeAdded;
+  // Set default value directly, otherwise it tries to input as null if custom constructor is called
+  private LocalDateTime timeAdded = LocalDateTime.now();
 
   @Enumerated(EnumType.STRING)
   @Column(name = "reimbursement_type")
   private ReimbursementType reimbursementType;
+
+  public Ticket(User user, int amount, String description, ReimbursementType reimbursementType) {
+    this.user = user;
+    this.amount = amount;
+    this.description = description;
+    this.reimbursementType = reimbursementType;
+  }
 }
