@@ -18,11 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import project1.app.DTO.UserSignUpDTO;
-
-enum Role {
-  EMPLOYEE,
-  MANAGER
-}
+import project1.app.Enums.UserRole;
 
 @Entity
 @Table(name = "users")
@@ -49,7 +45,7 @@ public class User {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "user_role")
-  private Role userRole;
+  private UserRole userRole;
 
   // mappedBy refers to the name of the variable in the ticket entity, which is user in this case (private User user)
   // cascade makes sure that anything referencing this user will update all associated tickets
@@ -66,10 +62,6 @@ public class User {
     this.firstName = userInfo.getFirstName();
     this.lastName = userInfo.getLastName();
     this.email = userInfo.getEmail();
-    if (userInfo.getRole() == null) {
-      this.userRole = Role.EMPLOYEE;
-    } else {
-      this.userRole = userInfo.getRole() == "MANAGER" ? Role.MANAGER : Role.EMPLOYEE;
-    }
+    this.userRole = userInfo.getRole() == null ? UserRole.EMPLOYEE : UserRole.fromString(userInfo.getRole());
   }
 }
