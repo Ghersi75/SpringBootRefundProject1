@@ -17,12 +17,6 @@ export const UserProvider = ({ children }: ChildrenPropType) => {
   const [userCookie, _] = useCookies(["userInfo"]);
   const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
 
-  // User logged in, format username, otherwise it default to null ^
-  if ( userCookie.userInfo ) {
-    const decodedUsername = decodeUsername(userCookie.userInfo.username);
-    setUserInfo({ ...userCookie.userInfo, username: decodedUsername });
-  }
-
   // Update if cookie changes or is removed
   useEffect(() => {
     if ( userCookie.userInfo ) {
