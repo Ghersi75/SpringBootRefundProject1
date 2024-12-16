@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import project1.app.DTO.AuthUserInfoDTO;
 import project1.app.DTO.DisplayUserInfoDTO;
+import project1.app.DTO.UserInfoDTO;
 import project1.app.DTO.UserLoginDTO;
 import project1.app.DTO.UserSignUpDTO;
 import project1.app.Exceptions.Status401.InvalidLoginInformationException;
@@ -39,7 +41,7 @@ public class UserService {
   }
 
   // TODO: Make custom exceptions for each one and use appropriate status codes
-  public DisplayUserInfoDTO SignUpUser(UserSignUpDTO userInfo) {
+  public UserInfoDTO SignUpUser(UserSignUpDTO userInfo) {
     User userWithUsername = this.userRepository.findByUsernameIgnoreCase(userInfo.getUsername());
     
     if (userWithUsername != null) {
@@ -70,11 +72,12 @@ public class UserService {
     }
 
     DisplayUserInfoDTO newUserInfo = new DisplayUserInfoDTO(newUser.getUsername(), newUser.getEmail());
+    AuthUserInfoDTO newUserAuthInfo = new AuthUserInfoDTO(newUser.getId(), newUser.getUserRole());
 
-    return newUserInfo;
+    return new UserInfoDTO(newUserInfo, newUserAuthInfo);
   }
 
-  public DisplayUserInfoDTO LoginUser(UserLoginDTO userInfo) {
+  public UserInfoDTO LoginUser(UserLoginDTO userInfo) {
     User userWithEmail = this.userRepository.findByEmailIgnoreCase(userInfo.getEmail());
 
     // Email invalid
@@ -90,7 +93,8 @@ public class UserService {
     }
 
     DisplayUserInfoDTO loggedInUserInfo = new DisplayUserInfoDTO(userWithEmail.getUsername(), userWithEmail.getEmail());
+    AuthUserInfoDTO newUserAuthInfo = new AuthUserInfoDTO(userWithEmail.getId(), userWithEmail.getUserRole());
 
-    return loggedInUserInfo;
+    return new UserInfoDTO(loggedInUserInfo, newUserAuthInfo);
   }
 }
