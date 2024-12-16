@@ -19,12 +19,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-enum TicketStatus {
-  PENDING,
-  APPROVED,
-  DENIED
-}
+import project1.app.Enums.TicketStatus;
 
 @Entity
 @Table(name = "tickets")
@@ -49,9 +44,9 @@ public class Ticket {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "ticket_status")
-  private TicketStatus ticket_status;
+  private TicketStatus ticketStatus;
 
   @JsonFormat(pattern = "hh:mm - dd/MM/yy")
   @Column(name = "time_added")
-  private LocalDateTime time_added;
+  private LocalDateTime timeAdded;
 }
