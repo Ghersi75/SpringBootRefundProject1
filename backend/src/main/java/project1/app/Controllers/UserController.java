@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import project1.app.DTO.UserInfoDTO;
+import project1.app.DTO.DisplayUserInfoDTO;
 import project1.app.DTO.UserLoginDTO;
 import project1.app.DTO.UserSignUpDTO;
+import project1.app.Enums.UserRole;
 import project1.app.Models.User;
 import project1.app.Service.UserService;
 import project1.app.Utils.CookieUtil;
+import project1.app.Utils.JWTUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,11 @@ public class UserController {
 
   @GetMapping("/all")
   public List<User> GetAllUsersHandler() {
+    String JWT = JWTUtil.generateToken(1L, UserRole.MANAGER);
+    System.out.println(JWT);
+
+    System.out.println(JWTUtil.extractUserInfoFromJWT(JWT));
+
     return this.userService.getAllUsers();
   }
 
@@ -70,7 +77,7 @@ public class UserController {
   @Transactional(rollbackFor = Exception.class)
   public Map<String, Boolean> SingUpHandler(@Valid @RequestBody() UserSignUpDTO userInfo, HttpServletResponse res) {
     // userService.SignUpUser should never return null, so this should be safe
-    UserInfoDTO newUserInfo = this.userService.SignUpUser(userInfo);
+    DisplayUserInfoDTO newUserInfo = this.userService.SignUpUser(userInfo);
     Cookie userInfoCookie = CookieUtil.CreateCookie("userInfo", newUserInfo, "/", false, true, -1);
     res.addCookie(userInfoCookie);
     return Map.of("success", true);
@@ -83,7 +90,7 @@ public class UserController {
   // Rollback for any exception
   @Transactional(rollbackFor = Exception.class)
   public Map<String, Boolean> LoginHandler(@Valid @RequestBody() UserLoginDTO userInfo, HttpServletResponse res) {
-    UserInfoDTO loggedInUserInfo = this.userService.LoginUser(userInfo);
+    DisplayUserInfoDTO loggedInUserInfo = this.userService.LoginUser(userInfo);
     Cookie userInfoCookie = CookieUtil.CreateCookie("userInfo", loggedInUserInfo, "/", false, true, -1);
     res.addCookie(userInfoCookie);
     return Map.of("success", true);
