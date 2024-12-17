@@ -10,6 +10,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import project1.app.DTO.AuthUserInfoDTO;
 import project1.app.Enums.UserRole;
+import project1.app.Exceptions.Status500.InvalidJWTException;
+import project1.app.Exceptions.Status500.InvalidJWTPayloadException;
 import project1.app.Exceptions.Status500.Status500Exception;
 
 // https://github.com/jwtk/jjwt?tab=readme-ov-file#jwt-example
@@ -43,18 +45,15 @@ public class JWTUtil {
         .getPayload();
     } catch (JwtException e) {
       // Invalid token, been tempered with
-      // TODO: Throw appropriate exception and clear user cookie, force sign out since token's been tempered with
-      e.printStackTrace();
-      throw new RuntimeException("Invalid JWT");
+      throw new InvalidJWTException("Invalid JWT. Cleared auth cookies. Try logging in again.");
     }
 
     AuthUserInfoDTO userInfo;
     try {
       userInfo = new AuthUserInfoDTO(Long.valueOf((String) jwtPayload.get("sub")), UserRole.fromString((String) jwtPayload.get("userRole")));
     } catch (Exception e) {
-      e.printStackTrace();
-      // TODO: Maybe change this to be more clear
-      throw new Status500Exception("Internal server error. Please try again");
+      // Valid token, invalid payload data
+      throw new InvalidJWTPayloadException("Invalid JWT payload. Cleared auth cookies. Try logging in again.");
     }
 
     return userInfo;
