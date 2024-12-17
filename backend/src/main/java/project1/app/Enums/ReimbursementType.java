@@ -1,5 +1,7 @@
 package project1.app.Enums;
 
+import project1.app.Exceptions.Status400.InvalidEnumValueException;
+
 public enum ReimbursementType {
   TRAVEL("TRAVEL"),
   LODGING("LODGING"),
@@ -23,6 +25,6 @@ public enum ReimbursementType {
       }
     }
 
-    throw new IllegalArgumentException("Invalid value. ReimbursementType must be Travel, Lodging, Food or Other, case insensitive.");
+    throw new InvalidEnumValueException("Invalid reimbursement type. Value must be Travel, Lodging, Food or Other, case insensitive.");
   }
 }

@@ -1,5 +1,7 @@
 package project1.app.Enums;
 
+import project1.app.Exceptions.Status400.InvalidEnumValueException;
+
 public enum UserRole {
   EMPLOYEE("EMPLOYEE"),
   MANAGER("MANAGER");
@@ -21,6 +23,6 @@ public enum UserRole {
       }
     }
 
-    throw new IllegalArgumentException("Invalid value. UserRole value must be Manager or Employee, case insensitive");
+    throw new InvalidEnumValueException("Invalid user role. Value must be Manager or Employee, case insensitive");
   }
 }
