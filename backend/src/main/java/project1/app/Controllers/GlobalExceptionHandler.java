@@ -11,7 +11,9 @@ import project1.app.Exceptions.Status500.Status500Exception;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.util.Comparator;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -64,7 +66,7 @@ public class GlobalExceptionHandler {
   public Map<String, String> handleInvalidArguments(MethodArgumentNotValidException e) {
     // Don't understand this well, but BindingResult essentially keeps track of errors, if any
     // getFieldErrors() returns a List<FieldError> and since this method is hit, there must be at least 1 item in the List, thus .get(0) returns it
-    FieldError firstError = e.getBindingResult().getFieldErrors().get(0);
+    FieldError firstError = e.getBindingResult().getFieldErrors().stream().sorted(Comparator.comparing(FieldError::getField)).collect(Collectors.toList()).get(0);
     // Not sure why it's called DefaultMessage, but this works as intended
     return Map.of("error", firstError.getDefaultMessage());
   }
