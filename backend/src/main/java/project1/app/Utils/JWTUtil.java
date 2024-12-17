@@ -12,7 +12,6 @@ import project1.app.DTO.AuthUserInfoDTO;
 import project1.app.Enums.UserRole;
 import project1.app.Exceptions.Status500.InvalidJWTException;
 import project1.app.Exceptions.Status500.InvalidJWTPayloadException;
-import project1.app.Exceptions.Status500.Status500Exception;
 
 // https://github.com/jwtk/jjwt?tab=readme-ov-file#jwt-example
 // Code examples from github above helped as there's no official docs that I could find
