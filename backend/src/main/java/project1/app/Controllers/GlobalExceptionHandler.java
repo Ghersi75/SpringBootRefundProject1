@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import project1.app.Exceptions.Status400.Status400Exception;
 import project1.app.Exceptions.Status401.Status401Exception;
 import project1.app.Exceptions.Status409.Status409Exception;
 import project1.app.Exceptions.Status500.Status500Exception;
@@ -18,6 +19,15 @@ import org.springframework.validation.FieldError;
 // Not too familiar with this, but it's typically used for Exception Handler classes
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+  // Status 400 - Bad Request
+  // Thrown if user sends invalid data
+  // Example: Invalid enum values for user roles, ticket status or reimbursement type
+  @ExceptionHandler(Status400Exception.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public Map<String, String> Status400Handler(Status400Exception e) {
+    return Map.of("error", e.getMessage());
+  }
+
   // Status 401 - Unauthorized
   // Thrown if user login is unsuccessful or user doesn't have access to an endpoint
   // Example: EMPLOYEE Role user tries to access MANAGER only endpoints
