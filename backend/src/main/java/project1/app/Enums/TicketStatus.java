@@ -1,5 +1,7 @@
 package project1.app.Enums;
 
+import project1.app.Exceptions.Status400.InvalidEnumValueException;
+
 public enum TicketStatus {
   PENDING("PENDING"),
   APPROVED("APPROVED"),
@@ -15,13 +17,13 @@ public enum TicketStatus {
     if (value == null) {
       return null;
     }
-    System.out.println(value);
+
     for ( TicketStatus status : TicketStatus.values() ) {
       if ( status.value.equalsIgnoreCase(value) ) {
         return status;
       }
     }
 
-    throw new IllegalArgumentException("Invalid TicketStatus value. Value must be Pending, Approved or Denied, case insensitive");
+    throw new InvalidEnumValueException("Invalid ticket status. Value must be Pending, Approved or Denied, case insensitive");
   }
 }
