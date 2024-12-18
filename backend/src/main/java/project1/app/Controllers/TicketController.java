@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import project1.app.DTO.AuthUserInfoDTO;
 import project1.app.DTO.NewTicketDTO;
 import project1.app.Enums.TicketStatus;
@@ -36,7 +37,11 @@ public class TicketController {
       // TODO: Not authorized, clear cookie and sign out
       throw new Status500Exception("Missing JWT");
     }
-    AuthUserInfoDTO userInfoDTO = JWTUtil.extractUserInfoFromJWT(jwt);
+    System.out.println(jwt);
+    // For some reason cookies are saved with quotes at the beginning and end
+    // This is rough and ugly but works for now
+    // TODO: Maybe fix this
+    AuthUserInfoDTO userInfoDTO = JWTUtil.extractUserInfoFromJWT(jwt.replace("\"", ""));
     switch (userInfoDTO.getUserRole()) {
       case EMPLOYEE:
         if (userId != null && userId != userInfoDTO.getUserId()) {
@@ -52,14 +57,17 @@ public class TicketController {
         return this.ticketService.getAllTicketsFiltered(userId, TicketStatus.PENDING);
     }
   }
-
+  
   @PostMapping("")
-  public Ticket createTicket(@RequestBody NewTicketDTO ticketInfo, @CookieValue(value = "jwt", defaultValue = "") String jwt) {
+  public Ticket createTicket(@Valid @RequestBody NewTicketDTO ticketInfo, @CookieValue(value = "jwt", defaultValue = "") String jwt) {
     if (jwt.isEmpty()) {
       // TODO: Not authorized, clear cookie and sign out
       throw new Status500Exception("Missing JWT");
     }
-    AuthUserInfoDTO userInfoDTO = JWTUtil.extractUserInfoFromJWT(jwt);
+    // For some reason cookies are saved with quotes at the beginning and end
+    // This is rough and ugly but works for now
+    // TODO: Maybe fix this
+    AuthUserInfoDTO userInfoDTO = JWTUtil.extractUserInfoFromJWT(jwt.replace("\"", ""));
     
     if (userInfoDTO.getUserRole() == UserRole.MANAGER) {
       // TODO: Create proper exception
