@@ -1,7 +1,6 @@
 package project1.app.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -33,14 +32,13 @@ public class TicketService {
     return this.ticketRepository.findByUserIdAndTicketStatus(userId, ticketStatus);
   }
 
-  public Ticket createTicket(NewTicketDTO ticketInfo) {
-    // TODO: Fix once JWT works and userId is added to NewTicketDTO
-    Optional<User> userWithId = this.userRepository.findById(1L);
+  public Ticket createTicket(NewTicketDTO ticketInfo, Long userId) {
+    Optional<User> userWithId = this.userRepository.findById(userId);
 
     // User doesn't exist
     if (userWithId.isEmpty()) {
       // TODO: Make proper exception
-      throw new RuntimeException();
+      throw new RuntimeException("User not found");
     }
 
     // Won't throw exceptions since it's not empty
