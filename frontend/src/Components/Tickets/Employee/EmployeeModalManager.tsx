@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { reimbursementType } from "../../Types/TicketProps";
-import { useUserInfo } from "../../Hooks/useUserInfo";
 import axios from "axios";
 import EmployeeModal from "./EmployeeModal";
-import { EmployeeModalManagerProps } from "../../Types/EmployeeModalTypes";
+import { useUserInfo } from "../../../Hooks/useUserInfo";
+import { EmployeeModalManagerProps } from "../../../Types/EmployeeModalTypes";
+import { ReimbursementType } from "../../../Types/TicketProps";
 
 export default function EmployeeModalManager({ setIsOpen, setTickets }: EmployeeModalManagerProps) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState(0);
-  const [reimbursementType, setReimbursementType] = useState<reimbursementType>("OTHER");
+  const [reimbursementType, setReimbursementType] = useState<ReimbursementType>("OTHER");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const { userInfo } = useUserInfo();

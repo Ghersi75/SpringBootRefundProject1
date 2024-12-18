@@ -2,7 +2,7 @@ import { useState } from "react"
 import Ticket from "./Ticket";
 import TicketsTableHeader from "./TicketsTableHeader";
 import { TicketsProps } from "../../../Types/TicketProps";
-import EmployeeModalManager from "../EmployeeModalManager";
+import EmployeeModalManager from "./EmployeeModalManager";
 
 export default function Tickets({ tickets, setTickets }: TicketsProps) {
   const [isOpen, setIsOpen] = useState(false);

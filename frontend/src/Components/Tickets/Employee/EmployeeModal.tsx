@@ -1,4 +1,4 @@
-import { EmployeeModalProps } from "../../Types/EmployeeModalTypes";
+import { EmployeeModalProps } from "../../../Types/EmployeeModalTypes"
 
 // TODO: Create variables for reused styling here
 // TODO: Write better logic for Radio components so they're not hardcoded
