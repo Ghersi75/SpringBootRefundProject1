@@ -1,11 +1,16 @@
 type TicketStatus = "PENDING" | "APPROVED" | "DENIED";
-export type reimbursementType = "TRAVEL" | "FOOD" | "LODGING" | "OTHER";
+export type ReimbursementType = "TRAVEL" | "FOOD" | "LODGING" | "OTHER";
 
 export interface TicketProps {
   id: number,
   amount: number,
   description: string,
   ticketStatus: TicketStatus,
-  reimbursementType: reimbursementType,
+  reimbursementType: ReimbursementType,
   timeAdded: string
+}
+
+export interface TicketsProps {
+  tickets: TicketProps[],
+  setTickets: React.Dispatch<React.SetStateAction<TicketProps[]>>
 }
