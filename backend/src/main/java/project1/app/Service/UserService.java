@@ -71,7 +71,7 @@ public class UserService {
       throw new UserCreationError("User Creation Error");
     }
 
-    DisplayUserInfoDTO newUserInfo = new DisplayUserInfoDTO(newUser.getUsername(), newUser.getEmail());
+    DisplayUserInfoDTO newUserInfo = new DisplayUserInfoDTO(newUser.getUsername(), newUser.getEmail(), newUser.getId(), newUser.getUserRole());
     AuthUserInfoDTO newUserAuthInfo = new AuthUserInfoDTO(newUser.getId(), newUser.getUserRole());
 
     return new UserInfoDTO(newUserInfo, newUserAuthInfo);
@@ -92,7 +92,7 @@ public class UserService {
       throw new InvalidLoginInformationException("Invalid login information");
     }
 
-    DisplayUserInfoDTO loggedInUserInfo = new DisplayUserInfoDTO(userWithEmail.getUsername(), userWithEmail.getEmail());
+    DisplayUserInfoDTO loggedInUserInfo = new DisplayUserInfoDTO(userWithEmail.getUsername(), userWithEmail.getEmail(), userWithEmail.getId(), userWithEmail.getUserRole());
     AuthUserInfoDTO newUserAuthInfo = new AuthUserInfoDTO(userWithEmail.getId(), userWithEmail.getUserRole());
 
     return new UserInfoDTO(loggedInUserInfo, newUserAuthInfo);

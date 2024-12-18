@@ -7,6 +7,8 @@ export interface ChildrenPropType {
 export interface UserInfoType {
   username: string,
   email: string,
+  userId: number,
+  userRole: "EMPLOYEE" | "MANAGER",
   profilePicLink: string | null
 }
 
