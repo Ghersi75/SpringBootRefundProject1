@@ -1,35 +1,32 @@
-import { useEffect, useState } from "react"
-import Modal from "./Modal";
-import axios from "axios";
-import { useUserInfo } from "../../Hooks/useUserInfo";
+import { useState } from "react"
 import Ticket from "./Ticket";
-import TicketsTopRow from "./TicketsTopRow";
+import TicketsTableHeader from "./TicketsTableHeader";
+import { TicketsProps } from "../../Types/TicketProps";
+import EmployeeModalManager from "./EmployeeModalManager";
 
-export default function Tickets() {
-  const { userInfo } = useUserInfo();
+export default function Tickets({ tickets, setTickets }: TicketsProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [tickets, setTicket] = useState<any[]>([]);
-
-  useEffect(() => {
-    if (userInfo != null) {
-      axios.get(`http://localhost:8080/ticket?userId=${userInfo.userId}`, {
-        withCredentials: true
-      })
-        .then(data => console.log(data));
-    }
-  }, [userInfo])
 
   return (
     <div className="grow flex flex flex-col overflow-hidden p-8 justify-center items-center gap-8">
-      {isOpen && <Modal setIsOpen={setIsOpen}/>}
+      {isOpen &&
+        <EmployeeModalManager
+          setIsOpen={setIsOpen}
+          setTickets={setTickets} />}
       <div className="grow overflow-scroll rounded-xl">
         <table className="table-fixed w-full bg-zinc-500 border-collapse grow">
-          <TicketsTopRow />
-          {/* [&>*:nth-child(odd)]:bg-zinc-400 [&>*:nth-child(odd)]:divide-zinc-300 [&>*:nth-child(even)]:bg-zinc-500 [&>*:nth-child(even)]:divide-zinc-300 text-white last:bg-red-500 */}
+          <TicketsTableHeader />
           <tbody className="divide-y divide-zinc-800">
-            {[...Array(25).keys()].map((i) => {
+            {tickets.map((ticket, idx) => {
               return (
-                <Ticket id={1} amount={1233} description="Nice description yap yap yap" reimbursementType="TRAVEL" ticketStatus="PENDING" timeAdded="12:30" key={i}/>
+                <Ticket
+                  id={ticket.id}
+                  amount={ticket.amount}
+                  description={ticket.description}
+                  reimbursementType={ticket.reimbursementType}
+                  ticketStatus={ticket.ticketStatus}
+                  timeAdded={ticket.timeAdded}
+                  key={idx} />
               )
             })}
           </tbody>
