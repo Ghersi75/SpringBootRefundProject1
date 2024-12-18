@@ -1,4 +1,4 @@
-import { TicketProps } from "../../Types/TicketProps";
+import { TicketProps } from "../../../Types/TicketProps";
 
 export default function Ticket({
   id,

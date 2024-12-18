@@ -3,7 +3,7 @@ import Navbar from "./Components/Navbar/Navbar"
 import SignUpManager from "./Components/SignUp/SignUpManager"
 import { Toaster } from "react-hot-toast"
 import LoginManager from "./Components/Login/LoginManager"
-import TicketsManager from "./Components/Tickets/TicketsManager"
+import TicketsManager from "./Components/Tickets/Employee/EmployeeTicketsManager"
 
 function App() {
   return (
