@@ -18,6 +18,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
   // If either value is null it will skip the check
   // For example, if userId is null the condition will be (NULL IS NULL OR :userId = t.user.id)
   // Since NULL IS NULL is true, the second part of it won't need to be checked since OR only needs either one to be a true condition
-  @Query("SELECT t FROM Ticket t WHERE (:userId IS NULL OR :userId = t.user.id) AND (:ticketStatus IS NULL OR :ticketStatus = t.ticketStatus)")
+  @Query("SELECT t FROM Ticket t WHERE (:userId IS NULL OR :userId = t.user.id) AND (:ticketStatus IS NULL OR :ticketStatus = t.ticketStatus) ORDER BY t.timeAdded DESC")
   List<Ticket> findByUserIdAndTicketStatus(@Param("userId") Long userId, @Param("ticketStatus") TicketStatus ticketStatus);
 }
