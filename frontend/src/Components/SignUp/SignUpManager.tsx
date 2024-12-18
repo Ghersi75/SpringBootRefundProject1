@@ -3,7 +3,7 @@ import SignUp from "./SignUp";
 import { useDebounce } from "../../Hooks/useDebounce";
 import { SignUpReturnType } from "../../Types/APIReturnTypes";
 import { useNavigate } from "react-router-dom";
-import LeaveIfLoggedIn from "../LeaveIfLoggedIn";
+import RedirectIfLoggedIn from "../RouteGuards/RedirectIfLoggedIn";
 
 export default function SignUpManager() {
   const navigate = useNavigate();
@@ -34,9 +34,9 @@ export default function SignUpManager() {
         }
       })
   }
-  
+
   return (
-    <LeaveIfLoggedIn>
+    <RedirectIfLoggedIn>
       <SignUp
         email={email}
         setEmail={setEmail}
@@ -46,6 +46,6 @@ export default function SignUpManager() {
         setPassword={setPassword}
         isUsernameAvailable={isUsernameAvailable}
         handleSignUp={handleSignUp} />
-    </LeaveIfLoggedIn>
+    </RedirectIfLoggedIn>
   )
 }
