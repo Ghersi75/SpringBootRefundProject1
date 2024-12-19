@@ -19,6 +19,7 @@ import project1.app.DTO.NewTicketDTO;
 import project1.app.DTO.UpdateTicketDTO;
 import project1.app.Enums.TicketStatus;
 import project1.app.Enums.UserRole;
+import project1.app.Exceptions.InvalidOrMissingJWT;
 import project1.app.Exceptions.Status500.Status500Exception;
 import project1.app.Models.Ticket;
 import project1.app.Service.TicketService;
@@ -39,8 +40,7 @@ public class TicketController {
   @GetMapping("")
   public List<Ticket> getAllTicketsHandler(@RequestParam(required = false) Long userId, @RequestParam(required = false) String ticketStatus, @CookieValue(value = "jwt", defaultValue = "") String jwt) {
     if (jwt.isEmpty()) {
-      // TODO: Not authorized, clear cookie and sign out
-      throw new Status500Exception("Missing JWT");
+      throw new InvalidOrMissingJWT("Missing JWT");
     }
     System.out.println(jwt);
     // For some reason cookies are saved with quotes at the beginning and end
@@ -66,8 +66,7 @@ public class TicketController {
   @PostMapping("")
   public Ticket createTicket(@Valid @RequestBody NewTicketDTO ticketInfo, @CookieValue(value = "jwt", defaultValue = "") String jwt) {
     if (jwt.isEmpty()) {
-      // TODO: Not authorized, clear cookie and sign out
-      throw new Status500Exception("Missing JWT");
+      throw new InvalidOrMissingJWT("Missing JWT");
     }
     // For some reason cookies are saved with quotes at the beginning and end
     // This is rough and ugly but works for now
@@ -86,8 +85,7 @@ public class TicketController {
   @PatchMapping("")
   public Ticket updateTicket(@Valid @RequestBody UpdateTicketDTO ticketInfo, @CookieValue(value = "jwt", defaultValue = "") String jwt) {
     if (jwt.isEmpty()) {
-      // TODO: Not authorized, clear cookie and sign out
-      throw new Status500Exception("Missing JWT");
+      throw new InvalidOrMissingJWT("Missing JWT");
     }
     // For some reason cookies are saved with quotes at the beginning and end
     // This is rough and ugly but works for now

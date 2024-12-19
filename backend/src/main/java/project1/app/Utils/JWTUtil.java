@@ -10,8 +10,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import project1.app.DTO.AuthUserInfoDTO;
 import project1.app.Enums.UserRole;
-import project1.app.Exceptions.Status500.InvalidJWTException;
-import project1.app.Exceptions.Status500.InvalidJWTPayloadException;
+import project1.app.Exceptions.InvalidOrMissingJWT;
 
 // https://github.com/jwtk/jjwt?tab=readme-ov-file#jwt-example
 // Code examples from github above helped as there's no official docs that I could find
@@ -44,7 +43,7 @@ public class JWTUtil {
         .getPayload();
     } catch (JwtException e) {
       // Invalid token, been tempered with
-      throw new InvalidJWTException("Invalid JWT. Cleared auth cookies. Try logging in again.");
+      throw new InvalidOrMissingJWT("Invalid JWT. Cleared auth cookies. Try logging in again.");
     }
 
     AuthUserInfoDTO userInfo;
@@ -52,7 +51,7 @@ public class JWTUtil {
       userInfo = new AuthUserInfoDTO(Long.valueOf((String) jwtPayload.get("sub")), UserRole.fromString((String) jwtPayload.get("userRole")));
     } catch (Exception e) {
       // Valid token, invalid payload data
-      throw new InvalidJWTPayloadException("Invalid JWT payload. Cleared auth cookies. Try logging in again.");
+      throw new InvalidOrMissingJWT("Invalid JWT payload. Cleared auth cookies. Try logging in again.");
     }
 
     return userInfo;
