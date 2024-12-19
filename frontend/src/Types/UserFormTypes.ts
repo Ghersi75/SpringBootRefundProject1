@@ -6,6 +6,7 @@ export interface SignUpFormPropsType {
   password: string,
   setPassword: React.Dispatch<React.SetStateAction<string>>,
   isUsernameAvailable: boolean | null,
+  errorMessage: string,
   handleSignUp: () => void
 }
 
