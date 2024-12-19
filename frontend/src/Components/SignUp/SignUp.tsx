@@ -23,7 +23,7 @@ export default function SignUp({ email, setEmail, username, setUsername, passwor
         <input className="bg-zinc-700 rounded p-2 text-white"  onChange={(e) => { handleChange(e, setUsername) }} value={username} />
         <label className="text-white"> Password: </label>
         <div className="relative">
-          <input className="bg-zinc-700 rounded p-2 text-white" type={!showPass ? "password" : ""} onChange={(e) => { handleChange(e, setPassword) }} value={password}/>
+          <input className="bg-zinc-700 rounded p-2 text-white pr-16" type={!showPass ? "password" : ""} onChange={(e) => { handleChange(e, setPassword) }} value={password}/>
           <div className="absolute right-0 top-1/2 -translate-y-1/2 right-4 text-white hover:underline cursor-pointer text-blue-500" onClick={handleShowPassword}> { showPass ? "Hide" : "Show"} </div>
         </div>
         <button className="bg-zinc-700 p-2 rounded text-white" onClick={handleSignUp}> Sign Up </button>
