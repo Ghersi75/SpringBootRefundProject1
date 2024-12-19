@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { SignUpFormPropsType } from "../../Types/UserFormTypes";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp({ email, setEmail, username, setUsername, password, setPassword, handleSignUp }: SignUpFormPropsType) {
   const [showPass, setShowPass] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => {
     setState(e.target.value);
@@ -25,6 +27,7 @@ export default function SignUp({ email, setEmail, username, setUsername, passwor
           <div className="absolute right-0 top-1/2 -translate-y-1/2 right-4 text-white hover:underline cursor-pointer" onClick={handleShowPassword}> show </div>
         </div>
         <button className="bg-zinc-700 p-2 rounded text-white" onClick={handleSignUp}> Sign Up </button>
+        <p className="text-blue-600 text-sm"> Already have an account? <br /> <span className="hover:underline hover:cursor-pointer" onClick={() => {navigate("/login")}}> Log in </span></p>
       </form>
     </div>
   )
