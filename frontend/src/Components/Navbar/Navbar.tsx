@@ -6,8 +6,7 @@ export default function Navbar() {
   const { userInfo } = useUserInfo();
 
   return(
-    <nav className="h-[80px] min-w-svw bg-zinc-800 flex gap-4 py-4 px-8 justify-between items-center text-white">
-      <h1> Logo </h1>
+    <nav className="h-[80px] min-w-svw bg-zinc-800 flex gap-4 py-4 px-8 justify-end items-center text-white">
         {
           userInfo ?
           <NavbarUserInfo /> :
