@@ -1,4 +1,4 @@
-import { reimbursementType, TicketProps } from "./TicketProps";
+import { ReimbursementType, TicketProps } from "./TicketProps";
 
 export interface EmployeeModalManagerProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -10,8 +10,8 @@ export interface EmployeeModalProps {
   setDescription: React.Dispatch<React.SetStateAction<string>>,
   amount: number,
   setAmount: React.Dispatch<React.SetStateAction<number>>,
-  reimbursementType: reimbursementType,
-  setReimbursementType: React.Dispatch<React.SetStateAction<reimbursementType>>,
+  reimbursementType: ReimbursementType,
+  setReimbursementType: React.Dispatch<React.SetStateAction<ReimbursementType>>,
   createTicket: () => void,
   errorMessage: string,
   successMessage: string,
