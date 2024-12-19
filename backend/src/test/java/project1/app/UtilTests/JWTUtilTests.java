@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import project1.app.DTO.AuthUserInfoDTO;
 import project1.app.Enums.UserRole;
-import project1.app.Exceptions.InvalidOrMissingJWT;
+import project1.app.Exceptions.Status401.InvalidOrMissingJWTExeptions;
 import project1.app.Utils.JWTUtil;
 
 public class JWTUtilTests {
@@ -56,14 +56,14 @@ public class JWTUtilTests {
   public void testExtractFromInvalidJWT() {
     // Test that appropriate exception is thrown if the JWT has been tempered with/is invalid
     String modifiedHeader = userId1RoleManagerJWT.substring(1);
-    assertThrows(InvalidOrMissingJWT.class, () -> JWTUtil.extractUserInfoFromJWT(modifiedHeader));
+    assertThrows(InvalidOrMissingJWTExeptions.class, () -> JWTUtil.extractUserInfoFromJWT(modifiedHeader));
 
     int payloadStartIdx = userId1RoleManagerJWT.indexOf(".");
     String modifiedPayload = userId1RoleManagerJWT.substring(payloadStartIdx + 1) + userId1RoleManagerJWT.substring(payloadStartIdx + 3);
-    assertThrows(InvalidOrMissingJWT.class, () -> JWTUtil.extractUserInfoFromJWT(modifiedPayload));
+    assertThrows(InvalidOrMissingJWTExeptions.class, () -> JWTUtil.extractUserInfoFromJWT(modifiedPayload));
 
     String modifierSignature = userId1RoleManagerJWT.substring(0, userId1RoleManagerJWT.length() - 3);
-    assertThrows(InvalidOrMissingJWT.class, () -> JWTUtil.extractUserInfoFromJWT(modifierSignature));
+    assertThrows(InvalidOrMissingJWTExeptions.class, () -> JWTUtil.extractUserInfoFromJWT(modifierSignature));
   }
 
   @Test
@@ -72,10 +72,10 @@ public class JWTUtilTests {
 
     // Same as the rest of the hardcoded JWTs, but this one's payload has "userId": "1" instead of "sub": "1", as well as "userRole": "MANAGER", but that won't make a difference
     String userIdJWT = "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOiIxIiwidXNlclJvbGUiOiJNQU5BR0VSIn0.TCV3XNfItvnRV0_9SCJBYrU3HKhqWppUH5Jf0Wr7X9vyqE_WzKoSln7i74ogv0GK8IcszP2YwULH6cEWKmpsfA";
-    assertThrows(InvalidOrMissingJWT.class, () -> JWTUtil.extractUserInfoFromJWT(userIdJWT));
+    assertThrows(InvalidOrMissingJWTExeptions.class, () -> JWTUtil.extractUserInfoFromJWT(userIdJWT));
 
     // // Empty payload, just { }
     String emptyPayloadJWT = "eyJhbGciOiJIUzUxMiJ9.e30.wSPZhcKmfgycswN02WZcWO8YKTU7xDqcQCc9TTkYoX27rrsjZ78xtMTGPQFGRwctiIwbOzYcPIF4-c5QzcdDbw";
-    assertThrows(InvalidOrMissingJWT.class, () -> JWTUtil.extractUserInfoFromJWT(emptyPayloadJWT));
+    assertThrows(InvalidOrMissingJWTExeptions.class, () -> JWTUtil.extractUserInfoFromJWT(emptyPayloadJWT));
   }
 }
