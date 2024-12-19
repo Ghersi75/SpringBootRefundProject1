@@ -1,37 +1,39 @@
 import { useState } from "react";
 import SignUp from "./SignUp";
 import { useDebounce } from "../../Hooks/useDebounce";
-import { SignUpReturnType } from "../../Types/APIReturnTypes";
 import { useNavigate } from "react-router-dom";
 import RedirectIfLoggedIn from "../RouteGuards/RedirectIfLoggedIn";
+import axios from "axios";
 
 export default function SignUpManager() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const isUsernameAvailable = useDebounce(username, 1000);
 
   // TODO: Add some sort of loading if there's extra time
   const handleSignUp = async () => {
-    await fetch("http://localhost:8080/user/signup", {
-      method: "POST",
-      body: JSON.stringify({
-        email: email,
-        username: username,
-        password: password
-      }),
-      credentials: "include",
+    setErrorMessage("");
+    await axios.post("http://localhost:8080/user/signup", {
+      email: email,
+      username: username,
+      password: password
+    }, {
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json"
       }
-    }).then((res) => res.json())
-      .then((data: SignUpReturnType) => {
-        // TODO: Add logic for failure
-        if (data.success) {
-          console.log(data);
+    })
+      .then((res) => {
+        if (res.data.success) {
+          // console.log(res.data);
           navigate("/");
         }
+      })
+      .catch((err) => {
+        setErrorMessage(err.response.data.error)
       })
   }
 
@@ -45,6 +47,7 @@ export default function SignUpManager() {
         password={password}
         setPassword={setPassword}
         isUsernameAvailable={isUsernameAvailable}
+        errorMessage={errorMessage}
         handleSignUp={handleSignUp} />
     </RedirectIfLoggedIn>
   )
