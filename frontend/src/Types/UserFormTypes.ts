@@ -15,5 +15,6 @@ export interface LoginFormPropsType {
   setEmail: React.Dispatch<React.SetStateAction<string>>,
   password: string,
   setPassword: React.Dispatch<React.SetStateAction<string>>,
+  errorMessage: string,
   handleLogin: () => void
 }
