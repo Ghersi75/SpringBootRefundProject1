@@ -21,6 +21,7 @@ import project1.app.Utils.JWTUtil;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -38,14 +39,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 // Not sure why this causes issues now, but it's fixed this way
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class UserController {
+  @Autowired
   UserService userService;
-
-  public UserController(UserService userService) {
-    this.userService = userService;
-  }
 
   @GetMapping("/all")
   public List<User> GetAllUsersHandler() {
+    
     String JWT = JWTUtil.generateToken(1L, UserRole.MANAGER);
     System.out.println(JWT);
 

@@ -2,6 +2,7 @@ package project1.app.Service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import project1.app.DTO.AuthUserInfoDTO;
@@ -19,11 +20,8 @@ import project1.app.Utils.PasswordUtil;
 
 @Service
 public class UserService {
+  @Autowired
   private UserRepository userRepository;
-
-  public UserService(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
 
   public List<User> getAllUsers() {
     return this.userRepository.findAll();

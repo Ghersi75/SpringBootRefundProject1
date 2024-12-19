@@ -2,6 +2,7 @@ package project1.app.Controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,11 +28,8 @@ import project1.app.Utils.JWTUtil;
 @RequestMapping("/ticket")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class TicketController {
+  @Autowired
   private TicketService ticketService;
-
-  public TicketController(TicketService ticketService) {
-    this.ticketService = ticketService;
-  }
   
   @GetMapping("/all")
   public List<Ticket> getAllTicketsHandler() {

@@ -3,6 +3,7 @@ package project1.app.Service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Nullable;
@@ -17,18 +18,16 @@ import project1.app.Repository.UserRepository;
 
 @Service
 public class TicketService {
+  @Autowired
   private TicketRepository ticketRepository;
-  private UserRepository userRepository;
 
-  public TicketService(TicketRepository ticketRepository, UserRepository userRepository) {
-    this.ticketRepository = ticketRepository;
-    this.userRepository = userRepository;
-  }
+  @Autowired
+  private UserRepository userRepository;
 
   public List<Ticket> getAllTickets() {
     return this.ticketRepository.findAll();
   }
-  
+
   public List<Ticket> getAllTicketsFiltered(@Nullable Long userId, @Nullable TicketStatus ticketStatus) {
     return this.ticketRepository.findByUserIdAndTicketStatus(userId, ticketStatus);
   }
