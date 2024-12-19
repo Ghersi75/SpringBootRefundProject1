@@ -11,6 +11,7 @@ import project1.app.DTO.NewTicketDTO;
 import project1.app.DTO.UpdateTicketDTO;
 import project1.app.Enums.ReimbursementType;
 import project1.app.Enums.TicketStatus;
+import project1.app.Exceptions.Status400.InvalidUserIdException;
 import project1.app.Models.Ticket;
 import project1.app.Models.User;
 import project1.app.Repository.TicketRepository;
@@ -37,8 +38,7 @@ public class TicketService {
 
     // User doesn't exist
     if (userWithId.isEmpty()) {
-      // TODO: Make proper exception
-      throw new RuntimeException("User not found");
+      throw new InvalidUserIdException("Invalid userId");
     }
 
     // Won't throw exceptions since it's not empty
