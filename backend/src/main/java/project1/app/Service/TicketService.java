@@ -11,7 +11,9 @@ import project1.app.DTO.NewTicketDTO;
 import project1.app.DTO.UpdateTicketDTO;
 import project1.app.Enums.ReimbursementType;
 import project1.app.Enums.TicketStatus;
+import project1.app.Exceptions.Status400.InvalidTicketIdException;
 import project1.app.Exceptions.Status400.InvalidUserIdException;
+import project1.app.Exceptions.Status500.TicketUpdateError;
 import project1.app.Models.Ticket;
 import project1.app.Models.User;
 import project1.app.Repository.TicketRepository;
@@ -54,13 +56,10 @@ public class TicketService {
   }
 
   public Ticket updateTicket(UpdateTicketDTO ticketInfo) {
-    // TODO: Check valid ticketId
-
     Optional<Ticket> ticketFound = this.ticketRepository.findById(ticketInfo.getTicketId());
 
     if (ticketFound.isEmpty()) {
-      // TODO: Add proper exception
-      throw new RuntimeException("Ticket not found");
+      throw new InvalidTicketIdException("Ticket not found");
     }
 
     Ticket ticket = ticketFound.get();
@@ -71,8 +70,7 @@ public class TicketService {
     Optional<Ticket> updatedTicket = this.ticketRepository.findById(ticketInfo.getTicketId());
 
     if (updatedTicket.isEmpty()) {
-      // TODO: Proper error handling
-      throw new RuntimeException("Something broke rip");
+      throw new TicketUpdateError("Something broke rip");
     }
 
     return updatedTicket.get();
