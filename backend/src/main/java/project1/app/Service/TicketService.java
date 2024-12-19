@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Nullable;
 import project1.app.DTO.NewTicketDTO;
+import project1.app.DTO.UpdateTicketDTO;
 import project1.app.Enums.ReimbursementType;
 import project1.app.Enums.TicketStatus;
 import project1.app.Models.Ticket;
@@ -51,5 +52,30 @@ public class TicketService {
     Ticket newTicket = new Ticket(user, ticketInfo.getAmount(), ticketInfo.getDescription(), reimbursementType);
 
     return this.ticketRepository.save(newTicket);
+  }
+
+  public Ticket updateTicket(UpdateTicketDTO ticketInfo) {
+    // TODO: Check valid ticketId
+
+    Optional<Ticket> ticketFound = this.ticketRepository.findById(ticketInfo.getTicketId());
+
+    if (ticketFound.isEmpty()) {
+      // TODO: Add proper exception
+      throw new RuntimeException("Ticket not found");
+    }
+
+    Ticket ticket = ticketFound.get();
+
+    ticket.setTicketStatus(TicketStatus.fromString(ticketInfo.getTicketStatus()));
+    this.ticketRepository.save(ticket);
+
+    Optional<Ticket> updatedTicket = this.ticketRepository.findById(ticketInfo.getTicketId());
+
+    if (updatedTicket.isEmpty()) {
+      // TODO: Proper error handling
+      throw new RuntimeException("Something broke rip");
+    }
+
+    return updatedTicket.get();
   }
 }
