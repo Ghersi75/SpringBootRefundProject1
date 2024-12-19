@@ -3,7 +3,7 @@ import { LoginFormPropsType } from "../../Types/UserFormTypes";
 import { useNavigate } from "react-router-dom";
 
 
-export default function Login({ email, setEmail, password, setPassword, handleLogin }: LoginFormPropsType) {
+export default function Login({ email, setEmail, password, setPassword, handleLogin, errorMessage }: LoginFormPropsType) {
   const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
 
@@ -26,6 +26,7 @@ export default function Login({ email, setEmail, password, setPassword, handleLo
           <div className="absolute right-0 top-1/2 -translate-y-1/2 right-4 text-white hover:underline cursor-pointer text-blue-500" onClick={handleShowPassword}>  {showPass ? "Hide" : "Show"}  </div>
         </div>
         <button className="bg-zinc-700 p-2 rounded text-white" onClick={handleLogin}> Log in </button>
+        {errorMessage != "" && <h1 className="text-red-500"> Error: {errorMessage} </h1>}
         <p className="text-blue-600 text-sm"> Don't have an account? <br /> <span className="hover:underline hover:cursor-pointer" onClick={() => { navigate("/signup") }}> Sign up </span></p>
       </form>
     </div>
