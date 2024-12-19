@@ -28,7 +28,6 @@ public class CookieUtil {
       // Could set this to any number (of seconds) and the cookie will be deleted by the browser once it expires
       cookie.setMaxAge(maxAge);
     } catch (Exception e) {
-      e.printStackTrace();
       throw new CookieCreationException("Cookie Creation Error");
     }
 
