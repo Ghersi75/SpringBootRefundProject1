@@ -20,8 +20,10 @@ import project1.app.Service.UserService;
 import project1.app.DTO.AuthUserInfoDTO;
 import project1.app.DTO.DisplayUserInfoDTO;
 import project1.app.DTO.UserInfoDTO;
+import project1.app.DTO.UserLoginDTO;
 import project1.app.DTO.UserSignUpDTO;
 import project1.app.Enums.UserRole;
+import project1.app.Exceptions.Status401.InvalidLoginInformationException;
 import project1.app.Exceptions.Status409.EmailAlreadyTakenException;
 import project1.app.Exceptions.Status409.UsernameAlreadyTakenException;
 import project1.app.Exceptions.Status500.UserCreationError;
@@ -40,16 +42,28 @@ public class UserServiceTests {
   @InjectMocks
   private UserService userService;
 
+  private String user1User = "user1";
+  private String user2User = "ghersi";
+
+  private String user1Email = "user1@gmail.com";
+  private String user2Email = "testemail@test.com";
+  // "testpassword" with 12 cost factor
+  // just used PasswordUtil and hashed it on the go
+  private String user1PasswordHash = "$2a$12$V7kp4sGMcYR5qj26XVwsf.mKiLxKDBLF2Hd1Fqlh4A6EZpp2F3QAa";
+  private String user1Pass = "testpassword";
+
   @BeforeEach
   public void setup() {
     User user1 = new User();
     user1.setId(1L);
-    user1.setUsername("user1");
-    user1.setEmail("user1@email.com");
+    user1.setUsername(user1User);
+    user1.setEmail(user1Email);
+    user1.setPasswordHash(user1PasswordHash);
+
     User user2 = new User();
     user2.setId(2L);
-    user2.setUsername("ghersi");
-    user2.setEmail("testemail@test.com");
+    user2.setUsername(user2User);
+    user2.setEmail(user2Email);
 
     // getAllUsers
     when(userRepository.findAll()).thenReturn(List.of(user1, user2));
@@ -71,16 +85,14 @@ public class UserServiceTests {
     when(userRepository.findByEmailIgnoreCase(Mockito.anyString())).thenAnswer(invocation -> {
       String email = invocation.getArgument(0);
 
-      if (email.equalsIgnoreCase("user1@gmail.com")) {
+      if (email.equalsIgnoreCase(user1Email)) {
         return user1;
-      } else if (email.equalsIgnoreCase("testemail@test.com")) {
+      } else if (email.equalsIgnoreCase(user2Email)) {
         return user2;
       }
 
       return null;
     });
-
-    System.out.println("Email: " + this.userRepository.findByEmailIgnoreCase("testemail@test.com"));
   }
 
   @Test
@@ -89,7 +101,7 @@ public class UserServiceTests {
 
     assertEquals(2, users.size());
     assertEquals(1L, users.get(0).getId());
-    assertEquals("testemail@test.com", users.get(1).getEmail());
+    assertEquals(user2Email, users.get(1).getEmail());
   }
 
   public void testIsUsernameAvailable() {
@@ -105,12 +117,12 @@ public class UserServiceTests {
     UserSignUpDTO userInfo = new UserSignUpDTO();
 
     // Username already taken
-    userInfo.setUsername("user1");
+    userInfo.setUsername(user1User);
     assertThrows(UsernameAlreadyTakenException.class, () -> this.userService.SignUpUser(userInfo));
     userInfo.setUsername("unique username");
 
     // Email already taken
-    userInfo.setEmail("user1@gmail.com");
+    userInfo.setEmail(user1Email);
     assertThrows(EmailAlreadyTakenException.class, () -> this.userService.SignUpUser(userInfo));
     userInfo.setEmail("uniquemail@gmail.com");
 
@@ -133,9 +145,37 @@ public class UserServiceTests {
         });
 
     // new User defaults to EMPLOYEE if not set
-    DisplayUserInfoDTO displayUserInfo = new DisplayUserInfoDTO(userInfo.getUsername(), userInfo.getEmail(), 3L,
+    DisplayUserInfoDTO displayUserInfo = new DisplayUserInfoDTO(
+        userInfo.getUsername(),
+        userInfo.getEmail(),
+        3L,
         UserRole.EMPLOYEE);
     AuthUserInfoDTO authUserInfo = new AuthUserInfoDTO(3L, UserRole.EMPLOYEE);
     assertEquals(new UserInfoDTO(displayUserInfo, authUserInfo), this.userService.SignUpUser(userInfo));
+  }
+
+  @Test
+  public void LoginUser() {
+    UserLoginDTO userInfo = new UserLoginDTO();
+    // Email that doesn't exist
+    userInfo.setEmail("uniquemail@gmail.com");
+    assertThrows(InvalidLoginInformationException.class, () -> this.userService.LoginUser(userInfo));
+    userInfo.setEmail(user1Email);
+
+    // Invalid password
+    userInfo.setPassword("password");
+    assertThrows(InvalidLoginInformationException.class, () -> this.userService.LoginUser(userInfo));
+    userInfo.setPassword(user1Pass);
+
+    // Valid login information
+    // does not default to EMPLOYEE since no new user is created here
+    DisplayUserInfoDTO displayUserInfo = new DisplayUserInfoDTO(
+        user1User,
+        user1Email,
+        1L,
+        null);
+    AuthUserInfoDTO authUserInfo = new AuthUserInfoDTO(1L, null);
+
+    assertEquals(new UserInfoDTO(displayUserInfo, authUserInfo), this.userService.LoginUser(userInfo));
   }
 }
