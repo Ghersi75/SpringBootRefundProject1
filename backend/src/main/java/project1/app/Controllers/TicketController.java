@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import project1.app.DTO.AuthUserInfoDTO;
 import project1.app.DTO.NewTicketDTO;
+import project1.app.DTO.UpdateTicketDTO;
 import project1.app.Enums.TicketStatus;
 import project1.app.Enums.UserRole;
 import project1.app.Exceptions.Status500.Status500Exception;
@@ -31,6 +33,11 @@ public class TicketController {
     this.ticketService = ticketService;
   }
   
+  @GetMapping("/all")
+  public List<Ticket> getAllTicketsHandler() {
+    return this.ticketService.getAllTickets();
+  }
+
   @GetMapping("")
   public List<Ticket> getAllTicketsHandler(@RequestParam(required = false) Long userId, @RequestParam(required = false) String ticketStatus, @CookieValue(value = "jwt", defaultValue = "") String jwt) {
     if (jwt.isEmpty()) {
@@ -76,5 +83,24 @@ public class TicketController {
 
     // TODO: Once JWT is implemented, get userId from it
     return this.ticketService.createTicket(ticketInfo, userInfoDTO.getUserId());
+  }
+
+  @PatchMapping("")
+  public Ticket updateTicket(@Valid @RequestBody UpdateTicketDTO ticketInfo, @CookieValue(value = "jwt", defaultValue = "") String jwt) {
+    if (jwt.isEmpty()) {
+      // TODO: Not authorized, clear cookie and sign out
+      throw new Status500Exception("Missing JWT");
+    }
+    // For some reason cookies are saved with quotes at the beginning and end
+    // This is rough and ugly but works for now
+    // TODO: Maybe fix this
+    AuthUserInfoDTO userInfoDTO = JWTUtil.extractUserInfoFromJWT(jwt.replace("\"", ""));
+    
+    if (userInfoDTO.getUserRole() == UserRole.EMPLOYEE) {
+      // TODO: Create proper exception
+      throw new Status500Exception("Only Managers can approve/deny tickets");
+    }
+
+    return this.ticketService.updateTicket(ticketInfo);
   }
 }
