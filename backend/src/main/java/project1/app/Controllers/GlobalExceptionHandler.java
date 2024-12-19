@@ -4,10 +4,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import project1.app.Exceptions.InvalidOrMissingJWT;
 import project1.app.Exceptions.Status400.Status400Exception;
 import project1.app.Exceptions.Status401.Status401Exception;
 import project1.app.Exceptions.Status409.Status409Exception;
 import project1.app.Exceptions.Status500.Status500Exception;
+import project1.app.Utils.CookieUtil;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
@@ -21,6 +25,18 @@ import org.springframework.validation.FieldError;
 // Not too familiar with this, but it's typically used for Exception Handler classes
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+  @ExceptionHandler(InvalidOrMissingJWT.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  public Map<String, String> InvalidOrMissingJWTHandler(InvalidOrMissingJWT e, HttpServletResponse res) {
+    Cookie clearedUserCookie = CookieUtil.CreateCookie("userInfo", "", "/", false, true, 0);
+    Cookie clearedJWTCookie = CookieUtil.CreateCookie("jwt", "", "/", true, true, 0);
+    // Clear cookies and force to log in again or sign up for new account
+    res.addCookie(clearedUserCookie);
+    res.addCookie(clearedJWTCookie);
+
+    return Map.of("error", e.getMessage());
+  }
+
   // Status 400 - Bad Request
   // Thrown if user sends invalid data
   // Example: Invalid enum values for user roles, ticket status or reimbursement type
