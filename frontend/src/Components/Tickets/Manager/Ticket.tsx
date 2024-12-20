@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TicketProps } from "../../../Types/TicketProps";
+import { ManagerTicketProps } from "../../../Types/TicketProps";
 import { useNavigate } from "react-router-dom";
 
 export default function Ticket({
@@ -8,7 +8,7 @@ export default function Ticket({
   description,
   timeAdded,
   reimbursementType,
-}: TicketProps) {
+}: ManagerTicketProps ) {
   const navigate = useNavigate();
 
   const handleClick = (ticketStatus: string) => {
