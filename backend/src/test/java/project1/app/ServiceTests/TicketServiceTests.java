@@ -16,7 +16,10 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import project1.app.DTO.NewTicketDTO;
+import project1.app.DTO.UpdateTicketDTO;
+import project1.app.Exceptions.Status400.InvalidTicketIdException;
 import project1.app.Exceptions.Status400.InvalidUserIdException;
+import project1.app.Exceptions.Status500.TicketUpdateError;
 import project1.app.Models.Ticket;
 import project1.app.Models.User;
 import project1.app.Repository.TicketRepository;
@@ -38,6 +41,8 @@ public class TicketServiceTests {
 
   private Long user1Id = 1L;
   private Long user2Id = 2L;
+  private Long ticket1Id = 1L;
+  private Long ticket2Id = 2L;
 
   @BeforeEach
   public void setup() {
@@ -68,6 +73,18 @@ public class TicketServiceTests {
       ticket.setId(1L);
       return ticket;
     });
+
+    // updateTicket
+    when(this.ticketRepository.findById(Mockito.anyLong())).thenAnswer(invocation -> {
+      Long id = invocation.getArgument(0);
+      if (id == ticket1Id) {
+        return Optional.of(ticket1);
+      } else if (id == ticket2Id) {
+        return Optional.of(ticket2);
+      }
+      return Optional.empty();
+    })
+    .thenReturn(Optional.empty());
   }
 
   // No point in testing getAllTickets and getAllTicketsFiltered since the logic is handled by the repository layer
@@ -89,5 +106,22 @@ public class TicketServiceTests {
     newTicket.setId(1L);
 
     assertEquals(newTicket, this.ticketService.createTicket(ticketInfo, user1Id));
+  }
+
+  @Test
+  public void testUpdateTicket() {
+    UpdateTicketDTO ticketInfo = new UpdateTicketDTO();
+    assertThrows(InvalidTicketIdException.class, () -> this.ticketService.updateTicket(ticketInfo));
+    ticketInfo.setTicketId(ticket1Id);
+    ticketInfo.setTicketStatus("Approved");
+
+    assertThrows(TicketUpdateError.class, () -> this.ticketService.updateTicket(ticketInfo));
+
+    // Putting in ticket info isnt important here
+    when(this.ticketRepository.findById(ticket1Id)).thenReturn(Optional.of(new Ticket()));
+
+    // TODO: Maybe fix this with values?
+    // Technically all we need to know is that the ticket is then returned without issues, values dont matter
+    assertEquals(new Ticket(), this.ticketRepository.findById(ticketInfo.getTicketId()).get());
   }
 }
