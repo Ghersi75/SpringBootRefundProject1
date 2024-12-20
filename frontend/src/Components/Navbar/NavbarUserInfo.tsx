@@ -9,11 +9,11 @@ export default function NavbarUserInfo() {
     return ;
   }
 
-  const { username, email, userId, profilePicLink } = userInfo;
+  const { username, email, userId, profilePicLink, userRole } = userInfo;
   return(
     <div className="flex items-center gap-4">
       <div className="flex flex-col justify-center">
-        <h1> {`${username} { id: ${userId} }`} </h1>
+        <h1> {`${username} { id: ${userId}, ${userRole.charAt(0).toUpperCase()}${userRole.substring(1).toLowerCase()} } `} </h1>
         <h1> {email} </h1>
       </div>
       <div>
