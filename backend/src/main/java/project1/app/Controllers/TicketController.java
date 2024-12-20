@@ -20,6 +20,7 @@ import project1.app.DTO.UpdateTicketDTO;
 import project1.app.Enums.TicketStatus;
 import project1.app.Enums.UserRole;
 import project1.app.Exceptions.Status401.InvalidOrMissingJWTExeptions;
+import project1.app.Exceptions.Status401.Status401Exception;
 import project1.app.Exceptions.Status500.Status500Exception;
 import project1.app.Models.Ticket;
 import project1.app.Service.TicketService;
@@ -51,7 +52,7 @@ public class TicketController {
         if (userId != null && userId != userInfoDTO.getUserId()) {
           // Employee can't request other employees' tickets
           // TODO: Fix exception thrown
-          throw new Status500Exception("Not authorized");
+          throw new Status401Exception("Not authorized");
         }
         return this.ticketService.getAllTicketsFiltered(userInfoDTO.getUserId(), TicketStatus.fromString(ticketStatus));
       // Since we only have two options and switch needs a default, MANAGER can be default for this case
