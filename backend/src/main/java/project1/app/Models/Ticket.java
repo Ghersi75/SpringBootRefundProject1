@@ -53,7 +53,7 @@ public class Ticket {
   @JsonFormat(pattern = "hh:mma - MMM dd yyyy")
   @Column(name = "time_added")
   // Set default value directly, otherwise it tries to input as null if custom constructor is called
-  private LocalDateTime timeAdded = LocalDateTime.now();
+  private LocalDateTime timeAdded = LocalDateTime.now().withNano(0);
 
   @Enumerated(EnumType.STRING)
   @Column(name = "reimbursement_type")
