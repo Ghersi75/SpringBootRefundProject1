@@ -44,28 +44,10 @@ public class UserController {
 
   @GetMapping("/all")
   public List<User> GetAllUsersHandler() {
-    
-    String JWT = JWTUtil.generateToken(1L, UserRole.MANAGER);
-    System.out.println(JWT);
-
-    System.out.println(JWTUtil.extractUserInfoFromJWT(JWT));
-
     return this.userService.getAllUsers();
   }
-
-  @GetMapping("/login")
-  public Map<String, Boolean> LoginHandler(@CookieValue(value = "token", defaultValue = "nothing") String token, HttpServletResponse res) {
-    System.out.println(token);
-    Cookie cookie = new Cookie("token", "test");
-
-    res.addCookie(cookie);
-    return Map.of("logged_in", false);
-  }
-
   @GetMapping("/check-username")
   public Map<String, Boolean> checkUsername(@RequestParam String username) {
-    System.out.println("Username: " + username);
-
     return Map.of("isAvailable", this.userService.isUsernameAvailable(username));
   }
 
@@ -75,7 +57,7 @@ public class UserController {
   @ResponseStatus(HttpStatus.CREATED)
   // Rollback for any exception
   @Transactional(rollbackFor = Exception.class)
-  public Map<String, Boolean> SingUpHandler(@Valid @RequestBody() UserSignUpDTO userInfo, HttpServletResponse res) {
+  public Map<String, Boolean> SignUpHandler(@Valid @RequestBody() UserSignUpDTO userInfo, HttpServletResponse res) {
     // userService.SignUpUser should never return null, so this should be safe
     UserInfoDTO newUserInfo = this.userService.SignUpUser(userInfo);
     Cookie userInfoCookie = CookieUtil.CreateCookie("userInfo", newUserInfo.getDisplayUserInfoDTO(), "/", false, true, -1);

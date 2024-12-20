@@ -42,7 +42,6 @@ public class TicketController {
     if (jwt.isEmpty()) {
       throw new InvalidOrMissingJWTExeptions("Missing JWT");
     }
-    System.out.println(jwt);
     // For some reason cookies are saved with quotes at the beginning and end
     // This is rough and ugly but works for now
     // TODO: Maybe fix this
