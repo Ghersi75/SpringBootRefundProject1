@@ -78,5 +78,35 @@ public class UserControllerTests {
       .andExpect(status().isCreated())
       .andExpect(cookie().exists("jwt"))
       .andExpect(cookie().exists("userInfo"));
+
+    // Empty email
+    userInfo.setEmail("");
+    mockMvc.perform(post("/user/signup")
+      .contentType("application/json")
+      .content(objectMapper.writeValueAsString(userInfo)))
+      .andExpect(status().isBadRequest());
+    
+    // Not valid email
+    userInfo.setEmail("test");
+    mockMvc.perform(post("/user/signup")
+      .contentType("application/json")
+      .content(objectMapper.writeValueAsString(userInfo)))
+      .andExpect(status().isBadRequest());
+    
+    userInfo.setEmail(user1Email);
+    
+    // Empty password
+    userInfo.setPassword("");
+    mockMvc.perform(post("/user/signup")
+      .contentType("application/json")
+      .content(objectMapper.writeValueAsString(userInfo)))
+      .andExpect(status().isBadRequest());
+
+    // Bad password, missing capital, number and symbol
+    userInfo.setPassword("password");
+    mockMvc.perform(post("/user/signup")
+      .contentType("application/json")
+      .content(objectMapper.writeValueAsString(userInfo)))
+      .andExpect(status().isBadRequest());
   }
 }
